@@ -38,7 +38,7 @@ export default function Modal({ isOpen, setIsOpen }) {
             className="bg-red-500 text-white px-4 py-2 rounded-lg"
             onClick={() => setIsOpen(false)}
           >
-            Close
+            Oi mama na pls!
           </button>
         </div>
 
@@ -46,10 +46,10 @@ export default function Modal({ isOpen, setIsOpen }) {
         <div className="flex justify-center items-center h-full">
           <div className="text-center">
             <h2 className="text-3xl font-semibold text-white">
-              Full-Screen Modal
+              Aho Vatija Aho
             </h2>
             <p className="mt-4 text-lg text-white">
-              This modal covers the entire screen and slides in from the top.
+              Dekhchho ni Tomar liga koto boro Fukni ta ready koira rakhchhi??
             </p>
           </div>
         </div>
