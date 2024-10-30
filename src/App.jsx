@@ -2,6 +2,7 @@ import { useState } from "react";
 import { DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
 import DropContainer from "./components/DropContainer";
+import MainContent from "./components/MainContent";
 
 function App() {
   const [droppedItem, setDroppedItem] = useState({ left: 0, top: 0 });
@@ -20,9 +21,7 @@ function App() {
   return (
     <DndProvider backend={HTML5Backend}>
       <div className="flex relative bg-red-500 overflow-hidden">
-        <div className="h-dvh w-dvw mx-auto container bg-red-200 flex justify-center items-center text-3xl font-bold">
-          Hello There My Name is Nafiz Iqbal
-        </div>
+        <MainContent />
         <DropContainer
           droppedItem={droppedItem}
           onDrop={handleDrop}
