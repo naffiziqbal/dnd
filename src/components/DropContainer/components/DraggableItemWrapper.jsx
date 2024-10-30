@@ -1,7 +1,11 @@
 import PropTypes from "prop-types";
 import { useDrag } from "react-dnd";
 
-const DraggableItem = ({ top = 50, setIsOpen }) => {
+export default function DraggableItemWrapper({
+  top = 50,
+  setIsOpen,
+  children,
+}) {
   const [{ isDragging }, drag] = useDrag(() => ({
     type: "ITEM",
     item: { id: 1 },
@@ -9,12 +13,10 @@ const DraggableItem = ({ top = 50, setIsOpen }) => {
       isDragging: !!monitor.isDragging(),
     }),
   }));
-
   return (
-    <>
-      <div
-        ref={drag}
-        className={`
+    <div
+      ref={drag}
+      className={`
         w-[100px]
         h-[100px]
         flex
@@ -29,19 +31,18 @@ const DraggableItem = ({ top = 50, setIsOpen }) => {
         rounded-xl
         cursor-pointer
       `}
-        style={{
-          top: `${top}px`,
-        }}
-        onClick={() => setIsOpen(true)}
-      >
-        <button className="w-full">click me</button>
-      </div>
-    </>
+      style={{
+        top: `${top}px`,
+      }}
+      onClick={() => setIsOpen(true)}
+    >
+      {children}
+    </div>
   );
-};
-DraggableItem.propTypes = {
+}
+
+DraggableItemWrapper.propTypes = {
   top: PropTypes.number,
   setIsOpen: PropTypes.func.isRequired,
+  children: PropTypes.node.isRequired,
 };
-
-export default DraggableItem;

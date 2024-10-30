@@ -1,6 +1,6 @@
 import { useRef } from "react";
 import PropTypes from "prop-types";
-import DraggableItem from "./DropContainer/components/DragableItem";
+import DraggableItem from "./DropContainer/components/DraggableItem";
 import ContainerWrapper from "./DropContainer/ContainerWrapper";
 
 const DropContainer = ({ droppedItem, onDrop, setIsOpen }) => {
