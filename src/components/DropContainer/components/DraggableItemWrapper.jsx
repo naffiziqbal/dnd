@@ -6,6 +6,7 @@ export default function DraggableItemWrapper({
   setIsOpen,
   children,
 }) {
+  ``;
   const [{ isDragging }, drag] = useDrag(() => ({
     type: "ITEM",
     item: { id: 1 },
@@ -13,6 +14,7 @@ export default function DraggableItemWrapper({
       isDragging: !!monitor.isDragging(),
     }),
   }));
+
   return (
     <div
       ref={drag}
@@ -22,14 +24,15 @@ export default function DraggableItemWrapper({
         flex
         justify-center
         items-center
-        bg-blue-500
-        ${isDragging ? "opacity-50" : "opacity-100"}
+        ${isDragging ? "bg-blue-200" : "bg-blue-400"}
+        ${isDragging ? "opacity-0" : "opacity-100"}
         absolute
         transition-all
         ease-in-out
-        duration-300
         rounded-xl
         cursor-pointer
+        hover:scale-105 
+        duration-300
       `}
       style={{
         top: `${top}px`,
