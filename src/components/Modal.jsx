@@ -1,18 +1,59 @@
 import PropTypes from "prop-types";
+import { useEffect } from "react";
 
 export default function Modal({ isOpen, setIsOpen }) {
+  // Prevent scrolling when the modal is open
+  useEffect(() => {
+    if (isOpen) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "";
+    }
+
+    // Cleanup on unmount
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, [isOpen]);
+
   return (
     <>
-      {isOpen && (
-        <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-green-500 p-4 rounded-lg w-screen h-screen flex justify-center items-center">
+      {/* Backdrop */}
+      <div
+        className={`fixed inset-0 bg-black bg-opacity-50 transition-opacity duration-300 ${
+          isOpen ? "opacity-100" : "opacity-0 pointer-events-none"
+        }`}
+        onClick={() => setIsOpen(false)}
+      ></div>
+
+      {/* Full-Screen Modal */}
+      <div
+        className={`fixed top-0 left-0 w-screen h-screen bg-green-500 transform transition-transform duration-500 ease-in-out ${
+          isOpen ? "translate-y-0" : "-translate-y-full"
+        }`}
+      >
+        {/* Close Button */}
+        <div className="absolute top-4 right-4">
           <button
-            className="bg-red-500 text-white p-2 rounded-lg"
+            className="bg-red-500 text-white px-4 py-2 rounded-lg"
             onClick={() => setIsOpen(false)}
           >
             Close
           </button>
         </div>
-      )}
+
+        {/* Modal Content */}
+        <div className="flex justify-center items-center h-full">
+          <div className="text-center">
+            <h2 className="text-3xl font-semibold text-white">
+              Full-Screen Modal
+            </h2>
+            <p className="mt-4 text-lg text-white">
+              This modal covers the entire screen and slides in from the top.
+            </p>
+          </div>
+        </div>
+      </div>
     </>
   );
 }
