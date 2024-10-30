@@ -1,0 +1,6 @@
+#floating-snap-btn-wrapper {
+  transition: transform 0.3s ease-in-out;
+}
+#floating-snap-btn-wrapper:hover {
+  transform: scale(1.1);
+}

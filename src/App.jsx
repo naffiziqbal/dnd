@@ -1,37 +1,92 @@
-import { useState } from "react";
-import { DndProvider } from "react-dnd";
-import { HTML5Backend } from "react-dnd-html5-backend";
-import DropContainer from "./components/DropContainer";
-import MainContent from "./components/MainContent";
-import Modal from "./components/Modal";
+import { useState, useRef, useEffect } from "react";
+import { IoShareSocialOutline } from "react-icons/io5";
 
-function App() {
-  const [droppedItem, setDroppedItem] = useState({ left: 0, top: 0 });
-  const [isOpen, setIsOpen] = useState(false);
+const App = () => {
+  const fabRef = useRef(null);
+  const mainWrapperRef = useRef(null);
+  const [isActive, setIsActive] = useState(false);
+  const [position, setPosition] = useState({ top: "50%", right: "30px" });
+  const [dragging, setDragging] = useState(false);
 
-  const handleDrop = (item, monitor, containerRef) => {
-    const offset = monitor.getSourceClientOffset();
-    const containerRect = containerRef.current.getBoundingClientRect();
+  useEffect(() => {
+    const handleMouseMove = (e) => {
+      if (dragging && !isActive) {
+        setPosition((prevPosition) => ({
+          ...prevPosition,
+          top: `${e.clientY}px`,
+        }));
+      }
+    };
 
-    if (offset) {
-      const top = offset.y - containerRect.top;
-      setDroppedItem({ top });
+    const handleTouchMove = (e) => {
+      if (dragging && !isActive) {
+        setPosition((prevPosition) => ({
+          ...prevPosition,
+          top: `${e.touches[0].clientY}px`,
+        }));
+      }
+    };
+
+    const handleMouseUp = () => {
+      if (dragging) setDragging(false);
+    };
+
+    window.addEventListener("mousemove", handleMouseMove);
+    window.addEventListener("touchmove", handleTouchMove);
+    window.addEventListener("mouseup", handleMouseUp);
+    window.addEventListener("touchend", handleMouseUp);
+
+    return () => {
+      window.removeEventListener("mousemove", handleMouseMove);
+      window.removeEventListener("touchmove", handleTouchMove);
+      window.removeEventListener("mouseup", handleMouseUp);
+      window.removeEventListener("touchend", handleMouseUp);
+    };
+  }, [dragging, isActive]);
+
+  const mouseDown = (e) => {
+    e.preventDefault();
+    if (!isActive) {
+      setDragging(true);
+    }
+  };
+
+  const handleClick = () => {
+    if (!dragging) {
+      setIsActive(!isActive);
     }
   };
 
   return (
-    <DndProvider backend={HTML5Backend}>
-      <div className="flex relative bg-red-500 overflow-hidden">
-        <MainContent />
-        <DropContainer
-          droppedItem={droppedItem}
-          onDrop={handleDrop}
-          setIsOpen={setIsOpen}
-        />
+    <div
+      id="main-wrapper"
+      ref={mainWrapperRef}
+      className="relative w-full h-screen bg-[#E1E8FD] overflow-hidden"
+    >
+      <div
+        id="floating-snap-btn-wrapper"
+        ref={fabRef}
+        className={`absolute rounded-full w-12 h-12 ${
+          isActive ? "bg-red-500" : "bg-[#6B26BB]"
+        } text-white flex items-center justify-center shadow-lg cursor-pointer ${
+          dragging
+            ? "animate-dragging"
+            : "transition-transform duration-300 ease-in-out"
+        }`}
+        style={{
+          top: position.top,
+          right: position.right,
+          transform: "translateY(-50%)",
+          transition: dragging ? "none" : "0.3s ease-in-out",
+        }}
+        onMouseDown={mouseDown}
+        onTouchStart={mouseDown}
+        onClick={handleClick}
+      >
+        <IoShareSocialOutline size={24} />
       </div>
-      <Modal isOpen={isOpen} setIsOpen={setIsOpen} />
-    </DndProvider>
+    </div>
   );
-}
+};
 
 export default App;
