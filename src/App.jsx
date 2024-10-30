@@ -5,29 +5,39 @@ import DropContainer from "./components/DropContainer";
 
 function App() {
   const [droppedItem, setDroppedItem] = useState({ left: 0, top: 0 });
+  const [isOpen, setIsOpen] = useState(false);
 
   const handleDrop = (item, monitor, containerRef) => {
     const offset = monitor.getSourceClientOffset();
     const containerRect = containerRef.current.getBoundingClientRect();
 
     if (offset) {
-      const left = offset.x - containerRect.left;
       const top = offset.y - containerRect.top;
-      setDroppedItem({ left, top });
+      setDroppedItem({ top });
     }
   };
 
   return (
     <DndProvider backend={HTML5Backend}>
-      <div
-        style={{
-          display: "flex",
-          justifyContent: "space-around",
-          marginTop: "50px",
-          width: "100vw",
-        }}
-      >
-        <DropContainer droppedItem={droppedItem} onDrop={handleDrop} />
+      <div className="flex relative bg-red-500 overflow-hidden">
+        <div className="h-dvh w-dvw mx-auto container bg-red-200 flex justify-center items-center text-3xl font-bold">
+          Hello There My Name is Nafiz Iqbal
+        </div>
+        <DropContainer
+          droppedItem={droppedItem}
+          onDrop={handleDrop}
+          setIsOpen={setIsOpen}
+        />
+        {isOpen && (
+          <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-green-500 p-4 rounded-lg w-screen h-screen flex justify-center items-center">
+            <button
+              className="bg-red-500 text-white p-2 rounded-lg"
+              onClick={() => setIsOpen(false)}
+            >
+              Close
+            </button>
+          </div>
+        )}
       </div>
     </DndProvider>
   );

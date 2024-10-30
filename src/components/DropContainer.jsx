@@ -1,11 +1,12 @@
-import React, { useRef } from "react";
+import { useRef } from "react";
+import PropTypes from "prop-types";
 import { useDrop } from "react-dnd";
 import DraggableItem from "./DragableItem";
 
-const DropContainer = ({ droppedItem, onDrop }) => {
+const DropContainer = ({ droppedItem, onDrop, setIsOpen }) => {
   const containerRef = useRef(null);
 
-  const [{ isOver }, drop] = useDrop(() => ({
+  const [, drop] = useDrop(() => ({
     accept: "ITEM",
     drop: (item, monitor) => onDrop(item, monitor, containerRef),
     collect: (monitor) => ({
@@ -14,31 +15,26 @@ const DropContainer = ({ droppedItem, onDrop }) => {
   }));
 
   return (
-    <div
-      style={{
-        width: "100vw",
-        height: "100vh",
-        display: "flex",
-        justifyContent: "center",
-        alignItems: "center",
-      }}
-    >
+    <div className="absolute right-10 top-1/2 -translate-y-1/2">
       <div
         ref={(node) => {
           drop(node);
           containerRef.current = node;
         }}
-        style={{
-          width: "10vh",
-          height: "80vh",
-          margin: "0 auto",
-          position: "relative",
-        }}
+        className="w-[100px] h-[50dvh] flex justify-center items-center bg-transparent"
       >
-        <DraggableItem left={droppedItem.left} top={droppedItem.top} />
+        <DraggableItem top={droppedItem.top} setIsOpen={setIsOpen} />
       </div>
     </div>
   );
+};
+
+DropContainer.propTypes = {
+  droppedItem: PropTypes.shape({
+    top: PropTypes.number.isRequired,
+  }).isRequired,
+  onDrop: PropTypes.func.isRequired,
+  setIsOpen: PropTypes.func.isRequired,
 };
 
 export default DropContainer;
